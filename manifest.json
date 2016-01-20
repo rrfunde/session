@@ -15,10 +15,8 @@
       "matches": [
         "http://*/*",
         "https://*/*"
-      ],
-      "js": [
-        "content.js"
       ]
+
     }
   ]
 }
