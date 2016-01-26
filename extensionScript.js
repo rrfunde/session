@@ -137,10 +137,18 @@ var deleteSession = function (sessionName) {
 };
 
 
+chrome.windows.onCreated.addListener(function() {
+    chrome.tabs.query({
+        active: true,
+        currentWindow: true
+    }, function (tabs) {
+
+        chrome.tabs.update(tabs[0].id, {"url": "index.html"}, function () {})})
+});
 chrome.storage.local.get("names", function (session) {
 
-    var length = 0,
-        j = 0;
+    var length = 0;
+
 
     if (session.names == undefined) {
 
@@ -162,8 +170,6 @@ chrome.storage.local.get("names", function (session) {
         //*************** event listeners for dropdown list items
 
 
-        if (j++ === 7)
-            j = 0;
 
 
     }
@@ -272,7 +278,7 @@ var generateEventListeners = function (sessionName) {
         deleteSession(sessionName);
     });
 };
-saveButton = document.getElementById('saveSession');
 
+saveButton = document.getElementById('saveSession');
 saveButton.onclick = session_save;
 
