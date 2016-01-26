@@ -11,12 +11,18 @@
     "storage"
   ],
   "content_scripts": [
+
     {
       "matches": [
         "http://*/*",
         "https://*/*"
-      ]
+      ],
+        	      "js": ["content.js"]
 
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["extensionScript.js"],
+    "persistent": false
+  }
 }
