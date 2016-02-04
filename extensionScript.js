@@ -136,15 +136,17 @@ var deleteSession = function (sessionName) {
 
 };
 
+/*
+chrome.windows.onCreated.addListener(function(window) {
 
-chrome.windows.onCreated.addListener(function() {
+    console.log(Object.getOwnPropertyNames(window));
     chrome.tabs.query({
         active: true,
         currentWindow: true
     }, function (tabs) {
 
         chrome.tabs.update(tabs[0].id, {"url": "index.html"}, function () {})})
-});
+});*/
 chrome.storage.local.get("names", function (session) {
 
     var length = 0;
