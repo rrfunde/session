@@ -57,8 +57,8 @@ var discardCurrentAndOpen = function (id) {
             currentWindow: true
         }, function (tabs) {
             chrome.tabs.update(tabs[0].id, {"url": url[0]}, function () {
-                for (var x = 1; x < l; x++) {
-                    chrome.tabs.create({url: url[x]});
+                if(l > 0) {
+                  chrome.windows.create({url: url})
                 }
             });
         });
@@ -70,8 +70,8 @@ var openAll = function (sessionName) {
     chrome.storage.local.get(sessionName, function (data) {
         var url = data[sessionName];
         var l = url.length;
-        for (x = 0; x < l; x++) {
-            chrome.tabs.create({url: url[x]});
+        if( l > 0) {
+          chrome.windows.create({url: url})
         }
     })
 };
