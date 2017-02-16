@@ -41,27 +41,13 @@ var saveCurrentAndOpen = function (id) {
 };
 
 var discardCurrentAndOpen = function (id) {
-    chrome.tabs.query({
-        active: false,
-        currentWindow: true
-    }, function (tabs) {
-        tabs.forEach(function (tab) {
-            chrome.tabs.remove(tab.id);
+      chrome.windows.getCurrent(function(currentWindow) {
+      chrome.windows.remove(currentWindow.id,function() {
+        chrome.storage.local.get(id, function (data) {
+            var url = data[id];
+            chrome.windows.create({url: url})
         })
-    });
-    chrome.storage.local.get(id, function (data) {
-        var url = data[id];
-        var l = url.length;
-        chrome.tabs.query({
-            active: true,
-            currentWindow: true
-        }, function (tabs) {
-            chrome.tabs.update(tabs[0].id, {"url": url[0]}, function () {
-                if(l > 0) {
-                  chrome.windows.create({url: url})
-                }
-            });
-        });
+      })
     })
 };
 
