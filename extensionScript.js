@@ -110,15 +110,13 @@ var generateDropdown = function (sessionName) {
     var con = document.getElementById('section1');
     var ul1 = document.createElement('ul');
     ul1.className = UL_CLASS;
-    ul1.id = UL_ID + sessionName;
+    ul1.id =  makeid()
 
     dropDownNames = ['save current & open', 'discard current & open', 'open', 'delete']
     for(i = 1; i < 5; i++) {
       var a = document.createElement('a');
       a.id = sessionName + i;
       a.appendChild(document.createTextNode(dropDownNames[ i-1 ]));
-      var sessionAction;
-
 
       a.addEventListener('click', function () {
         var functionInvokeId = this.id[ this.id.length - 1 ]
@@ -133,7 +131,6 @@ var generateDropdown = function (sessionName) {
             openAll(sessionName)
             break;
           case 4:
-            console.log("deleting")
             deleteSession(sessionName)
             break;
           default:
@@ -163,5 +160,15 @@ var generateDropdown = function (sessionName) {
     con.appendChild(document.createElement('br'));
 };
 
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 saveButton = document.getElementById('saveSession');
 saveButton.onclick = session_save;
