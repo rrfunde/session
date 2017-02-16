@@ -77,18 +77,12 @@ var openAll = function (sessionName) {
 };
 
 var deleteSession = function (sessionName) {
-
-    // chrome.storage.local.remove(sessionName, function () {
-        console.log(sessions["names"])
         console.log(sessionName)
         var index = sessions["names"].indexOf(sessionName);
-        console.log(index)
         sessions["names"].splice(index,1);
-        console.log(sessions["names"])
         chrome.storage.local.set(sessions, function () {
-            // location.reload();
+             location.reload();
         });
-    // });
 };
 
 chrome.storage.local.get("names", function (session) {
@@ -100,12 +94,9 @@ chrome.storage.local.get("names", function (session) {
         sessions = session;
         length = sessions['names'].length;
     }
-
     for (var i = 0; i < length; i++) {
         var sessionName = sessions['names'][i];
-
         generateDropdown(sessionName);
-        // generateEventListeners(sessionName);
     }
 
  // Injecting script
@@ -121,50 +112,38 @@ var generateDropdown = function (sessionName) {
     ul1.className = UL_CLASS;
     ul1.id = UL_ID + sessionName;
 
-    var a1 = document.createElement('a');
-    a1.id = sessionName + 1;
-    a1.appendChild(document.createTextNode('save current & open'));
-    a1.addEventListener('click', function () {
-        saveCurrentAndOpen(sessionName);
-    });
+    dropDownNames = ['save current & open', 'discard current & open', 'open', 'delete']
+    for(i = 1; i < 5; i++) {
+      var a = document.createElement('a');
+      a.id = sessionName + i;
+      a.appendChild(document.createTextNode(dropDownNames[ i-1 ]));
+      var sessionAction;
 
-    var a2 = document.createElement('a');
-    a2.id = sessionName + 2;
-    a2.appendChild(document.createTextNode('discard current & open'));
-    a2.addEventListener('click', function () {
-        discardCurrentAndOpen(sessionName);
-    });
 
-    var a3 = document.createElement('a');
-    a3.id = sessionName + 3;
-    a3.appendChild(document.createTextNode('open'));
-    a3.addEventListener('click', function () {
-        openAll(sessionName);
-    });
-
-    var a4 = document.createElement('a');
-    a4.id = sessionName + 4;
-    a4.appendChild(document.createTextNode('delete'));
-    a4.addEventListener('click', function () {
-        deleteSession(sessionName);
-        location.reload()
-    });
-    var li1 = document.createElement('li');
-    li1.appendChild(a1);
-
-    var li2 = document.createElement('li');
-    li2.appendChild(a2);
-
-    var li3 = document.createElement('li');
-    li3.appendChild(a3);
-
-    var li4 = document.createElement('li');
-    li4.appendChild(a4);
-
-    ul1.appendChild(li1);
-    ul1.appendChild(li2);
-    ul1.appendChild(li3);
-    ul1.appendChild(li4);
+      a.addEventListener('click', function () {
+        var functionInvokeId = this.id[ this.id.length - 1 ]
+        switch (parseInt(functionInvokeId)) {
+          case 1:
+            saveCurrentAndOpen(sessionName);
+            break;
+          case 2:
+            discardCurrentAndOpen(sessionName)
+            break;
+          case 3:
+            openAll(sessionName)
+            break;
+          case 4:
+            console.log("deleting")
+            deleteSession(sessionName)
+            break;
+          default:
+            break;
+        }
+      });
+      var list = document.createElement('li');
+      list.appendChild(a);
+      ul1.appendChild(list);
+    }
 
     var a5 = document.createElement('a');
     a5.className = "btn dropdown-button";
@@ -184,21 +163,5 @@ var generateDropdown = function (sessionName) {
     con.appendChild(document.createElement('br'));
 };
 
-// var generateEventListeners = function (sessionName) {
-//
-//     document.getElementById(sessionName + 1).addEventListener('click', function () {
-//         saveCurrentAndOpen(sessionName);
-//     });
-//     document.getElementById(sessionName + 2).addEventListener('click', function () {
-//         discardCurrentAndOpen(sessionName);
-//     });
-//     document.getElementById(sessionName + 3).addEventListener('click', function () {
-//         openAll(sessionName);
-//     });
-//     document.getElementById(sessionName + 4).addEventListener('click', function () {
-//         // deleteSession(sessionName);
-//         console.log(sessionName);
-//     });
-// };
 saveButton = document.getElementById('saveSession');
 saveButton.onclick = session_save;
